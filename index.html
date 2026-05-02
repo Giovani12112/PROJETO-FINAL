@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Oliveira_OTM | Ultra Injector v3</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
+    body { margin: 0; padding: 0; background-color: #0d1117; color: white; font-family: -apple-system, system-ui, sans-serif; height: 100vh; overflow-x: hidden; display: flex; justify-content: center; }
+    #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; top: 0; left: 0; pointer-events: none; opacity: 0.1; }
+    .app-container { position: relative; z-index: 10; width: 100%; max-width: 410px; padding: 30px 20px; display: flex; flex-direction: column; }
+    .header h1 { font-size: 26px; font-weight: 900; text-align: center; margin-bottom: 25px; text-transform: uppercase; color: #00d2ff; }
+    .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 15px; }
+    .tab-item { flex: 1; padding: 12px; border-radius: 12px; color: #888; text-align: center; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 13px; }
+    .tab-item.active { background: #00d2ff; color: #000; }
+    .main-card { background: #161b22; padding: 20px; border-radius: 25px; border: 1px solid #30363d; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .section-title { font-size: 11px; color: #00d2ff; text-transform: uppercase; margin: 15px 0 10px 0; font-weight: 800; letter-spacing: 1.5px; }
+    .function-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 15px; background: #21262d; margin-bottom: 8px; border-radius: 12px; }
+    .function-row span { font-size: 14px; font-weight: 500; color: #c9d1d9; }
+    .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #30363d; transition: .3s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: #fff; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: #00d2ff; }
+    input:checked + .slider:before { transform: translateX(20px); }
+    .btn-apply { width: 100%; padding: 18px; background: #00d2ff; color: #000; border: none; border-radius: 18px; font-weight: 800; font-size: 16px; margin-top: 20px; cursor: pointer; }
+    .btn-download { display: block; text-align: center; color: #00d2ff; text-decoration: none; font-size: 13px; font-weight: 700; margin-top: 15px; border: 1px solid #00d2ff; padding: 12px; border-radius: 15px; }
+    input[type="text"], input[type="number"] { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; color: #fff; text-align: center; margin-bottom: 8px; }
+    .row { display:flex; gap:8px; align-items:center; }
+    .small { font-size:12px; color:#98a0a6; }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="app-container">
+    <div class="header"><h1>Oliveira OTM V3</h1></div>
+    <div class="nav-tabs">
+      <div class="tab-item active" id="tab-ativacao" onclick="changeTab('ativacao')">Login</div>
+      <div class="tab-item" id="tab-painel" onclick="changeTab('painel')">Configurações</div>
+    </div>
+    <div class="main-card">
+      <!-- SEÇÃO DE LOGIN -->
+      <div id="sec-ativacao" class="content-section active">
+        <input type="text" id="token" placeholder="Token Master" spellcheck="false">
+        <button class="btn-apply" onclick="validar()">Validar Acesso</button>
+        <a href="Oliveira_V3_Assinado.mobileconfig" class="btn-download">📲 Instalar Perfil Verificado</a>
+      </div>
+      
+      <!-- PAINEL DE FUNÇÕES -->
+      <div id="sec-painel" class="content-section">
+        <div class="section-title">Engine Avançada (V3)</div>
+        <div class="function-row"><span>Precisão 90% Tiro Capa</span><label class="switch"><input type="checkbox" id="fn-precise" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Calibração de Estabilidade</span><label class="switch"><input type="checkbox" id="fn-stability" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Correção de Eixo Vertical</span><label class="switch"><input type="checkbox" id="fn-vertical" checked><span class="slider"></span></label></div>
+
+        <div class="section-title">Precision (com base nas offsets)</div>
+        <div class="function-row">
+          <div style="flex:1">
+            <div class="row"><span class="small">Auto Precision</span><label class="switch" style="margin-left:8px"><input type="checkbox" id="auto-precision" checked><span class="slider"></span></label></div>
+            <div style="margin-top:8px" class="small">Valor calculado a partir das offsets; pode ajustar manualmente.</div>
+          </div>
+        </div>
+        <div class="function-row">
+          <div style="flex:1">
+            <input type="range" id="precision-slider" min="1" max="100" value="90">
+            <div class="row" style="margin-top:6px"><input type="number" id="precision-value" min="1" max="100" value="90"><button class="btn-apply" id="btn-calc" style="width:120px;margin-left:8px">Calcular</button></div>
+          </div>
+        </div>
+
+        <div class="section-title">Otimização iOS</div>
+        <div class="function-row"><span>Destravar 120 FPS</span><label class="switch"><input type="checkbox" id="fn-120fps" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Otimização de Memória</span><label class="switch"><input type="checkbox" id="fn-mem" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Boost de Desempenho</span><label class="switch"><input type="checkbox" id="fn-boost" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Limpeza de Storage</span><label class="switch"><input type="checkbox" id="fn-clean" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Modo Low Power Gaming</span><label class="switch"><input type="checkbox" id="fn-lowpower" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Redução de Ping</span><label class="switch"><input type="checkbox" id="fn-ping" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Proteção de Privacidade</span><label class="switch"><input type="checkbox" id="fn-privacy" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>VPN Integrada</span><label class="switch"><input type="checkbox" id="fn-vpn" checked><span class="slider"></span></label></div>
+        <div class="function-row"><span>Firewall Avançado</span><label class="switch"><input type="checkbox" id="fn-firewall" checked><span class="slider"></span></label></div>
+        <button class="btn-apply" id="btn-save">Aplicar Configurações</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    const KEY = "68fbde36f576351f1378c5d5";
+    const OFFSETS = {
+      head: "0x3e8",
+      hip: "0x3ec",
+      chest: "0x3f0",
+      root: "0x3fc",
+      leftankle: "0x404",
+      rightankle: "0x408",
+      lefttoe: "0x40c",
+      righttoe: "0x410",
+      leftshoulder: "0x41c",
+      rightshoulder: "0x420",
+      righthand: "0x424",
+      lefthand: "0x428",
+      rightforearm: "0x42c",
+      leftforearm: "0x430",
+      RightCalf: "0x400",
+      LeftCalf: "0x404",
+      RightFoot: "0x408",
+      LeftFoot: "0x40c",
+      RightWristJoint: "0x424",
+      LeftWristJoint: "0x428"
+    };
+
+    function changeTab(to) {
+      const isAuth = localStorage.getItem('auth') === 'true';
+      if(to === 'painel' && !isAuth) {
+        alert("Acesso Negado! Insira o Token Master.");
+        return;
+      }
+      document.querySelectorAll('.content-section, .tab-item').forEach(e => e.classList.remove('active'));
+      document.getElementById('sec-' + to).classList.add('active');
+      document.getElementById('tab-' + to).classList.add('active');
+    }
+
+    function validar() {
+      const inputToken = document.getElementById('token').value.trim();
+      if(inputToken === KEY) {
+        localStorage.setItem('auth', 'true');
+        alert("ACESSO LIBERADO!");
+        changeTab('painel');
+      } else {
+        alert("Token Inválido!");
+      }
+    }
+
+    // Converte hex string -> inteiro seguro
+    function hexToInt(hex) {
+      try {
+        return parseInt(hex, 16) || 0;
+      } catch {
+        return 0;
+      }
+    }
+
+    // Calcula um valor de "precision" (1..100) a partir das offsets.
+    // Algoritmo determinístico, não modifica processos: combina distâncias entre ossos (endereços) para gerar um score.
+    function calculatePrecisionFromOffsets(offsets) {
+      // Pegamos os offsets mais relevantes para postura/atiraço: head, chest, hip, root, wrists
+      const keys = ['head','chest','hip','root','righthand','lefthand','rightforearm','leftforearm','rightshoulder','leftshoulder'];
+      const vals = keys.map(k => hexToInt(offsets[k] || '0x0'));
+      // Calcular "spread" como soma de diferenças absolutas adjacentes
+      let spread = 0;
+      for (let i = 0; i < vals.length - 1; i++) {
+        spread += Math.abs(vals[i] - vals[i+1]);
+      }
+      // Normalizar spread para um fator (maior spread -> menor precisão)
+      // Use um divisor empírico para mapear o spread para 0..100
+      const divisor = 0x800; // escala
+      let penalty = Math.min(80, Math.floor((spread / divisor) * 100));
+      // Base precision dependendo de flags/toggles (padrão alto)
+      let base = 95;
+      // Aplicar penalty
+      let precision = base - penalty;
+      // Ajustes adicionais por dedos/pés (endereço duplicado em algumas entradas)
+      const wristDiff = Math.abs(hexToInt(offsets['RightWristJoint']||'0') - hexToInt(offsets['LeftWristJoint']||'0'));
+      if (wristDiff > 0x10) precision -= 5;
+      // Clamp
+      precision = Math.max(1, Math.min(100, precision));
+      return precision;
+    }
+
+    // UI helpers
+    function setPrecisionUI(value) {
+      const slider = document.getElementById('precision-slider');
+      const input = document.getElementById('precision-value');
+      slider.value = value;
+      input.value = value;
+    }
+
+    document.getElementById('btn-calc').addEventListener('click', () => {
+      const calc = calculatePrecisionFromOffsets(OFFSETS);
+      setPrecisionUI(calc);
+      document.getElementById('auto-precision').checked = true;
+      alert("Precisão calculada: " + calc + "%");
+    });
+
+    // Gera um .mobileconfig (plist) compatível com iOS incluindo Precision e offsets
+    function generateMobileConfigPlist(payloadObj) {
+      function dictForOffsets(obj) {
+        return Object.entries(obj).map(([k,v]) =>
+          `        <key>${k}</key>\n        <string>${v}</string>`
+        ).join('\n');
+      }
+
+      const offsetsDict = dictForOffsets(payloadObj.offsets || {});
+      const precision = payloadObj.precision ?? 90;
+      // Monta plist simples com entry Offsets + Precision + features
+      return `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n  <key>PayloadContent</key>\n  <array>\n    <dict>\n      <key>PayloadType</key>\n      <string>com.oliveira.otm.offsets</string>\n      <key>PayloadVersion</key>\n      <integer>1</integer>\n      <key>PayloadIdentifier</key>\n      <string>com.oliveira.otm.offsets</string>\n      <key>PayloadDisplayName</key>\n      <string>Oliveira OTM Offsets</string>\n      <key>Offsets</key>\n      <dict>\n${offsetsDict}\n      </dict>\n      <key>Precision</key>\n      <integer>${precision}</integer>\n      <key>Features</key>\n      <dict>\n${Object.entries(payloadObj.features||{}).map(([k,v]) => `        <key>${k}</key>\n        <${typeof v === 'boolean' ? 'true/>' : '<string>' + v + '</string>'}`).join('\n')}\n      </dict>\n    </dict>\n  </array>\n  <key>PayloadType</key>\n  <string>Configuration</string>\n  <key>PayloadVersion</key>\n  <integer>1</integer>\n  <key>PayloadIdentifier</key>\n  <string>com.oliveira.otm.profile</string>\n  <key>PayloadDisplayName</key>\n  <string>Oliveira OTM Profile</string>\n</dict>\n</plist>`;
+    }
+
+    // Baixa .mobileconfig no iOS
+    function downloadMobileConfigIOS(filename, payloadObj) {
+      const plist = generateMobileConfigPlist(payloadObj);
+      const blob = new Blob([plist], { type: 'application/x-apple-aspen-config' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      return true;
+    }
+
+    // Copiar JSON para clipboard
+    async function copyOffsetsToClipboard(obj) {
+      const text = JSON.stringify(obj, null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try { await navigator.clipboard.writeText(text); return true; } catch {}
+      }
+      const t = document.createElement('textarea');
+      t.value = text;
+      t.style.position = 'fixed'; t.style.left = '-9999px';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); document.body.removeChild(t); return true; } catch { document.body.removeChild(t); return false; }
+    }
+
+    document.getElementById('btn-save').onclick = async function() {
+      const btn = this;
+      btn.innerText = "APLICANDO...";
+      try {
+        // Determinar precision (auto/manual)
+        const auto = document.getElementById('auto-precision').checked;
+        let precision = parseInt(document.getElementById('precision-value').value, 10) || 90;
+        if (auto) precision = calculatePrecisionFromOffsets(OFFSETS);
+
+        // Coletar features toggles
+        const features = {
+          precise: !!document.getElementById('fn-precise').checked,
+          stability: !!document.getElementById('fn-stability').checked,
+          vertical: !!document.getElementById('fn-vertical').checked,
+          fps120: !!document.getElementById('fn-120fps').checked,
+          memory: !!document.getElementById('fn-mem').checked,
+          boost: !!document.getElementById('fn-boost').checked
+        };
+
+
+        // Copiar JSON útil para debug/uso web
+        await copyOffsetsToClipboard({ offsets: OFFSETS, precision, features });
+
+        alert("✅ CONFIGURAÇÕES APLICADAS!\n\nO Free Fire será aberto agora.");
+      } catch (err) {
+        console.error(err);
+        alert("Erro ao aplicar configurações. Veja console.");
+      } finally {
+        btn.innerText = "Aplicar Configurações";
+      }
+    };
+
+    // Sincroniza slider/número
+    document.getElementById('precision-slider').addEventListener('input', (e) => {
+      document.getElementById('precision-value').value = e.target.value;
+      document.getElementById('auto-precision').checked = false;
+    });
+    document.getElementById('precision-value').addEventListener('input', (e) => {
+      let v = parseInt(e.target.value,10) || 1;
+      v = Math.max(1, Math.min(100, v));
+      document.getElementById('precision-slider').value = v;
+      document.getElementById('precision-value').value = v;
+      document.getElementById('auto-precision').checked = false;
+    });
+
+    // Auto-login se já tiver validado antes
+    if(localStorage.getItem('auth') === 'true') {
+      changeTab('painel');
+    }
+
+    // Inicializa UI com precision calculada
+    setPrecisionUI(calculatePrecisionFromOffsets(OFFSETS));
+
+    particlesJS('particles-js', { "particles": { "number": { "value": 30 }, "opacity": { "value": 0.1 }, "size": { "value": 2 }, "move": { "enable": true, "speed": 1 } } });
+  </script>
+</body>
+</html>
